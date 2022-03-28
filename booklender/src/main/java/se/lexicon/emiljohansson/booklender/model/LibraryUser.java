@@ -1,18 +1,42 @@
 package se.lexicon.emiljohansson.booklender.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
+import static se.lexicon.emiljohansson.booklender.model.constants.EntityConstants.GENERATOR;
+import static se.lexicon.emiljohansson.booklender.model.constants.EntityConstants.UUID_GENERATOR;
+
+@Entity
 public class LibraryUser {
-    int userID;
+    @Id
+    @GeneratedValue(generator = GENERATOR)
+    @GenericGenerator(name = GENERATOR, strategy = UUID_GENERATOR)
+    @Column(updatable = false)
+    UUID userID;
     LocalDate regDate;
     String name;
+
+    @Column(unique = true)
     String email;
+
+    public LibraryUser() {
+    }
 
     public LibraryUser(LocalDate regDate, String name, String email) {
         this.regDate = regDate;
         this.name = name;
         this.email = email;
+    }
+
+    public UUID getUserID() {
+        return userID;
     }
 
     public LocalDate getRegDate() {

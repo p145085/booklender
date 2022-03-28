@@ -1,16 +1,34 @@
 package se.lexicon.emiljohansson.booklender.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.UUID;
 
+import static se.lexicon.emiljohansson.booklender.model.constants.EntityConstants.GENERATOR;
+import static se.lexicon.emiljohansson.booklender.model.constants.EntityConstants.UUID_GENERATOR;
+
+@Entity
 public class Book {
-    int bookID;
+    @Id
+    @GeneratedValue(generator = GENERATOR)
+    @GenericGenerator(name = GENERATOR, strategy = UUID_GENERATOR)
+    @Column(updatable = false)
+    UUID bookID;
     String title;
     boolean available;
     boolean reserved;
     int maxLoanDays;
     BigDecimal finePerDay;
     String description;
+
+    public Book() {
+    }
 
     public Book(String title, int maxLoanDays, BigDecimal finePerDay, String description) {
         this.title = title;
@@ -19,7 +37,7 @@ public class Book {
         this.description = description;
     }
 
-    public int getBookID() {
+    public UUID getBookID() {
         return bookID;
     }
 

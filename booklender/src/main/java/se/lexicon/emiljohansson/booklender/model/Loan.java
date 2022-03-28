@@ -1,17 +1,38 @@
 package se.lexicon.emiljohansson.booklender.model;
 
+
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.UUID;
 
+import static se.lexicon.emiljohansson.booklender.model.constants.EntityConstants.GENERATOR;
+import static se.lexicon.emiljohansson.booklender.model.constants.EntityConstants.UUID_GENERATOR;
+
+@Entity
 public class Loan {
-    long loanID;
+    @Id
+    @GeneratedValue(generator = GENERATOR)
+    @GenericGenerator(name = GENERATOR, strategy = UUID_GENERATOR)
+    @Column(updatable = false)
+    UUID loanID;
+
+    @ManyToOne
     LibraryUser loanTaker;
+
+    @ManyToOne
     Book book;
+
     LocalDate loanDate;
     boolean concluded;
+
+    public Loan() {
+    }
 
     public Loan(LibraryUser loanTaker, Book book, LocalDate loanDate, boolean concluded) {
         this.loanTaker = loanTaker;
@@ -20,7 +41,7 @@ public class Loan {
         this.concluded = concluded;
     }
 
-    public long getLoanID() {
+    public UUID getLoanID() {
         return loanID;
     }
 
